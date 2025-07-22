@@ -7,6 +7,7 @@ phases:
     commands:
       - echo "Installing dependencies"
       - pip install -r requirements.txt -t backend/
+      - aws configure set region us-east-1 # Replace with your region
   build:
     commands:
       - echo "Packaging Lambda function"
@@ -19,10 +20,12 @@ phases:
     commands:
       - echo "Uploading artifact to S3 bucket mytodo-artifacts"
       - aws s3 cp build/lambda_function.zip s3://mytodo-artifacts/lambda_function.zip
+      - echo "Copying appspec.yml to build directory"
+      - cp appspec.yml build/appspec.yml
       - echo "Build and upload complete"
 
 artifacts:
   files:
     - build/lambda_function.zip
+    - build/appspec.yml
   discard-paths: yes
-

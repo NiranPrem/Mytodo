@@ -1,15 +1,13 @@
 version: 0.0
-
 Resources:
   - MyTodoLambda:
       Type: AWS::Lambda::Function
       Properties:
-        Name: MyTodoLambda          # Your Lambda function name here
-        Alias: live                 # Optional: your Lambda alias name
-        CurrentVersion: true
-
+        Name: MyTodoLambda
+        Alias: live
+        CurrentVersion: auto
+        TargetVersion: auto
 Hooks:
   AfterAllowTestTraffic:
-    - location: scripts/after_install.sh
-      timeout: 300
-
+    - Location: scripts/after_install.sh
+      Timeout: 300
