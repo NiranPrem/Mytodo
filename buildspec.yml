@@ -1,0 +1,31 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - echo Installing dependencies...
+      - pip install -r requirements.txt -t ./backend
+      - aws configure set default.region us-east-1
+  build:
+    commands:
+      - echo Building frontend...
+      - mkdir -p build/frontend
+      - cp -r frontend/* build/frontend/
+      - echo Building backend...
+      - mkdir -p build/backend
+      - cp backend/lambda_function.py build/backend/
+      - cd build/backend
+      - zip -r ../lambda_function.zip .
+  post_build:
+    commands:
+      - echo Updating Lambda function...
+      - cd build
+      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://lambda_function.zip
+      - echo Build completed
+artifacts:
+  files:
+    - build/frontend/*
+    - build/lambda_function.zip
+  base-directory: build
+  discard-paths: no
