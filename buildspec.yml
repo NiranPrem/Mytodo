@@ -3,25 +3,26 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.9 # Match your Lambda runtime
+      python: 3.9
     commands:
       - echo "Installing dependencies"
-      - pip install -r requirements.txt -t backend/ # Install dependencies to backend/
+      - pip install -r requirements.txt -t backend/
   build:
     commands:
-      - echo "Creating build directory and lambda_function.zip"
+      - echo "Packaging Lambda function"
       - mkdir -p build
       - cd backend
-      - zip -r ../build/lambda_function.zip . # Package all files in backend/
+      - zip -r ../build/lambda_function.zip .
       - cd ..
-      - ls -la build/ # Debug: verify ZIP file exists
-      - unzip -l build/lambda_function.zip # Debug: check ZIP contents
-      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://build/lambda_function.zip
+      - ls -la build/
   post_build:
     commands:
-      - echo "Deployment complete"
+      - echo "Uploading artifact to S3 bucket mytodo-artifacts"
+      - aws s3 cp build/lambda_function.zip s3://mytodo-artifacts/lambda_function.zip
+      - echo "Build and upload complete"
 
 artifacts:
   files:
     - build/lambda_function.zip
   discard-paths: yes
+

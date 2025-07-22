@@ -1,11 +1,15 @@
 version: 0.0
+
 Resources:
-  - Name: MyTodoLambda
-    Type: AWS::Lambda::Function
-    Source:
-      Locations:
-        - Location: build/lambda_function.zip
+  - MyTodoLambda:
+      Type: AWS::Lambda::Function
+      Properties:
+        Name: MyTodoLambda          # Your Lambda function name here
+        Alias: live                 # Optional: your Lambda alias name
+        CurrentVersion: true
+
 Hooks:
-  AfterInstall:
-    - Location: scripts/after_install.sh
-      Timeout: 300
+  AfterAllowTestTraffic:
+    - location: scripts/after_install.sh
+      timeout: 300
+
