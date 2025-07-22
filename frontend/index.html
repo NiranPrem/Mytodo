@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>🌟 Advanced To-Do Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="authOverlay">
+    <div>
+      <h2>Simulated Login</h2>
+      <p>Loading...</p>
+    </div>
+  </div>
+
+  <div class="container" id="todoContainer">
+    <h1>🌟 Advanced To-Do Manager</h1>
+    <div class="input-group">
+      <input type="text" id="taskInput" placeholder="Enter task..." required />
+      <input type="date" id="dueDate" />
+      <select id="priority">
+        <option value="Low">Low</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="High">High</option>
+      </select>
+      <input type="text" id="notes" placeholder="Add notes..." />
+      <input type="time" id="reminderTime" />
+      <input type="number" id="progress" min="0" max="100" placeholder="Progress (%)" />
+      <button onclick="addTask()">Add Task</button>
+    </div>
+    <ul id="taskList"></ul>
+    <div id="reminderNotification" class="reminder-notification"></div>
+  </div>
+
+  <script src="scripts.js"></script>
+</body>
+</html>
