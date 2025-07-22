@@ -1,18 +1,22 @@
 version: 0.0
 os: linux
 files:
-  - source: build/lambda_function.zip
+  - source: lambda_function.zip
     destination: /var/www/html/lambda
 hooks:
+  BeforeInstall:
+    - location: before_install.sh
+      timeout: 300
+      runas: ec2-user
   ApplicationStop:
-    - location: scripts/stop_application.sh
+    - location: stop_application.sh
       timeout: 300
       runas: ec2-user
   AfterInstall:
-    - location: scripts/after_install.sh
+    - location: after_install.sh
       timeout: 300
       runas: ec2-user
   ApplicationStart:
-    - location: scripts/start_application.sh
+    - location: start_application.sh
       timeout: 300
       runas: ec2-user
