@@ -1,10 +1,11 @@
 version: 0.0
-os: linux
-files:
-  - source: frontend/
-    destination: /usr/share/nginx/html/
-hooks:
+Resources:
+  - Name: MyTodoLambda
+    Type: AWS::Lambda::Function
+    Source:
+      Locations:
+        - Location: build/lambda_function.zip
+Hooks:
   AfterInstall:
-    - location: scripts/after_install.sh
-      timeout: 300
-      runas: root
+    - Location: scripts/after_install.sh
+      Timeout: 300

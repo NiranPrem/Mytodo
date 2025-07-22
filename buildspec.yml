@@ -1,31 +1,27 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
-      python: 3.8
+      python: 3.9 # Match your Lambda runtime
     commands:
-      - echo Installing dependencies...
-      - pip install -r requirements.txt -t ./backend
-      - aws configure set default.region us-east-1
+      - echo "Installing dependencies"
+      - pip install -r requirements.txt -t backend/ # Install dependencies to backend/
   build:
     commands:
-      - echo Building frontend...
-      - mkdir -p build/frontend
-      - cp -r frontend/* build/frontend/
-      - echo Building backend...
-      - mkdir -p build/backend
-      - cp backend/lambda_function.py build/backend/
+      - echo "Creating build directory and lambda_function.zip"
+      - mkdir -p build
       - cd backend
-      - zip -r ../build/lambda_function.zip .
+      - zip -r ../build/lambda_function.zip . # Package all files in backend/
+      - cd ..
+      - ls -la build/ # Debug: verify ZIP file exists
+      - unzip -l build/lambda_function.zip # Debug: check ZIP contents
+      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://build/lambda_function.zip
   post_build:
     commands:
-      - echo Updating Lambda function...
-      - cd /codebuild/output/src*/src/github.com/NiranPrem/Mytodo
-      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://build/lambda_function.zip
-      - echo Build completed
+      - echo "Deployment complete"
+
 artifacts:
   files:
-    - build/frontend/**/*
     - build/lambda_function.zip
-  base-directory: build
-  discard-paths: no
+  discard-paths: yes
