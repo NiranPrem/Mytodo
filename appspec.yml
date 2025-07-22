@@ -1,13 +1,18 @@
 version: 0.0
-Resources:
-  - MyTodoLambda:
-      Type: AWS::Lambda::Function
-      Properties:
-        Name: MyTodoLambda
-        Alias: live
-        CurrentVersion: auto
-        TargetVersion: auto
-Hooks:
-  AfterAllowTestTraffic:
-    - Location: scripts/after_install.sh
-      Timeout: 300
+os: linux
+files:
+  - source: build/lambda_function.zip
+    destination: /var/www/html/lambda
+hooks:
+  ApplicationStop:
+    - location: scripts/stop_application.sh
+      timeout: 300
+      runas: ec2-user
+  AfterInstall:
+    - location: scripts/after_install.sh
+      timeout: 300
+      runas: ec2-user
+  ApplicationStart:
+    - location: scripts/start_application.sh
+      timeout: 300
+      runas: ec2-user
