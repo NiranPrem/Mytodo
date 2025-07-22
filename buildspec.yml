@@ -15,17 +15,17 @@ phases:
       - echo Building backend...
       - mkdir -p build/backend
       - cp backend/lambda_function.py build/backend/
-      - cd build/backend
-      - zip -r ../lambda_function.zip .
+      - cd backend
+      - zip -r ../build/lambda_function.zip .
   post_build:
     commands:
       - echo Updating Lambda function...
-      - cd build
-      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://lambda_function.zip
+      - cd /codebuild/output/src*/src/github.com/NiranPrem/Mytodo
+      - aws lambda update-function-code --function-name MyTodoLambda --zip-file fileb://build/lambda_function.zip
       - echo Build completed
 artifacts:
   files:
-    - build/frontend/*
+    - build/frontend/**/*
     - build/lambda_function.zip
   base-directory: build
   discard-paths: no
